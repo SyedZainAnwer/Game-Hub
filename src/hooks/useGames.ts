@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { GameQuery } from "../App";
 import useData from "./useData";
-import { Genre } from "./useGenres";
 
 export interface Platform {
   id: number;
@@ -13,17 +12,19 @@ export interface Game {
   name: string;
   background_image: string;
   parent_platforms: { platform: Platform }[];
-  metacrtic: number;
+  metacritic: number;
 }
 
-const useGames = (
-  selectedGenre: Genre | null,
-  selectedPlatform: Platform | null
-) =>
+const useGames = ( gameQuery: GameQuery ) =>
   useData<Game>(
     "/games",
-    { params: { genres: selectedGenre?.id, platforms: selectedPlatform?.id } },
-    [selectedGenre?.id, selectedPlatform?.id]
+    { params: { 
+      genres: gameQuery.genre?.id, 
+      platforms: gameQuery.platform?.id ,
+      ordering: gameQuery.sortOrder,
+      search: gameQuery.searchText
+    }},
+    [gameQuery]
   );
 
 export default useGames;
